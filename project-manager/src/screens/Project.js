@@ -40,10 +40,14 @@ const Project = () =>{
 
     useEffect(()=>{
         async function setup(){
-            const data= await axios.get('http://localhost:5000/all-projects');
-            setProjects(data.data)
-            setShowProjects(data.data)
-            setLoad(true);
+            try{
+                const data= await axios.get('http://localhost:5000/all-projects');
+                setProjects(data.data)
+                setShowProjects(data.data)
+                setLoad(true);
+            }catch(e){
+                alert( e.message ? e.message : e)
+            }
         }
         if(!load){
             setup();
@@ -53,9 +57,12 @@ const Project = () =>{
     },[search])
 
     const debounced = useDebouncedCallback(async()=>{
-        const searchData = showProjects.filter(m => m.project.title.toLowerCase().includes(search.toLowerCase()) || m.project.technologies.toLowerCase().includes(search.toLowerCase()));
-        setProjects(searchData);
-
+        try{
+            const searchData = showProjects.filter(m => m.project.title.toLowerCase().includes(search.toLowerCase()) || m.project.technologies.toLowerCase().includes(search.toLowerCase()));
+            setProjects(searchData);
+        }catch(e){
+            alert( e.message ? e.message : e)
+        }
     }, 1000)
 
     return(
